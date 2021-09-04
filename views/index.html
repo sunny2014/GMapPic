@@ -1,15 +1,196 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/css/base.css">
-</head>
-<body>
-    <h2>我是一个ejs模板引擎</h2>
-    <p><%=title%></p>
+<html>
 
-    <%- include('footer.html') %>
+<head>
+    <title>Picture Map</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+
+    <script src="/js/layer.js"></script>
+
+    </link>
+
+    <!-- jsFiddle will insert css and js -->
+    <style>
+        /* Set the size of the div element that contains the map */
+
+        #gmap_wrapper {
+            width: 100%;
+            padding-top: 100%;
+            position: relative;
+            margin: auto;
+        }
+
+        #gmap {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info fixed-top">
+        <a class="navbar-brand" href="#">画像サイト</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">国内 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">欧州</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="chinaArea">中国</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">アメリカ</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid" style="margin-top: 50px;">
+        <div id="gmap_wrapper">
+            <div id="gmap"></div>
+        </div>
+    </div>
+
+
+    <!--The div element for the map -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+
+            </div>
+        </div>
+    </div>
+    <div id="picList" style="display: none;">
+        <div class="card" style="width: 18rem;">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Image cap">
+                <title>Placeholder</title>
+                <rect width="100%" height="100%" fill="#868e96" /><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image
+                    cap</text>
+            </svg>
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                    card's content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDlSIs0y85rMhs9dughVmDStz7ZDajOhbI&callback=initMap&libraries=&v=weekly&channel=2"
+        async></script>
+
+    <script>
+        // Initialize and add the map
+        let map;
+        function initMap() {
+            // The location of Uluru
+            const uluru = {
+                lat: 35.662036,
+                lng: 139.862006
+            };
+            const tourStops = [
+                [{ lat: 35.662036, lng: 139.862006 }, "西葛西店"],
+                [{ lat: 35.76298921786845, lng: 139.61733706695614 }, "錬馬店"],
+                [{ lat: 35.90791264314329, lng: 139.65304228380143 }, "埼玉店"],
+            ];
+            // The map, centered at Uluru
+            map = new google.maps.Map(document.getElementById("gmap"), {
+                zoom: 8,
+                center: uluru,
+            });
+            // The marker, positioned at Uluru
+            // const marker = new google.maps.Marker({
+            //     position: uluru,
+            //     map: map,
+            // });
+            //const image = "https://www.club-t.com/common-club-t-web/all/images/header-logo.svg";
+
+            // const beachMarker = new google.maps.Marker({
+            //     //position: { lat: -33.89, lng: 151.274 },
+            //     position: uluru,
+            //     map,
+            //     icon: image,
+            // });
+            tourStops.forEach(([position, title], i) => {
+                const marker = new google.maps.Marker({
+                    position,
+                    map,
+                    title: `${i + 1}`,
+                    label: `${i + 1}`,
+                    optimized: false,
+                });
+                // Add a click listener for each marker, and set up the info window.
+                marker.addListener("click", () => {
+                    // infoWindow.close();
+                    // infoWindow.setContent(marker.getTitle());
+                    // infoWindow.open(marker.getMap(), marker);
+                    //getPicList(marker.getTitle())
+                    //console.log(marker.getTitle());
+                    getLayer();
+                });
+            });
+        }
+        function getPicList(lct) {
+
+            $("#picList").html("");
+            let pic1 = $("<img src='https://www.club-t.com/sp/special/japan/whc/images/img-index-15.jpg'>");
+            $("#picList").append(pic1);
+
+            let pic2 = $("<img src='https://www.club-t.com/sp/special/japan/whc/images/img-index-15.jpg'>");
+            $("#picList").append(pic2);
+
+        }
+
+        function getLayer() {
+            var str1 = $("#picList").html()
+            //layer
+            layer.open({
+                type: 1
+                , content: str1
+                , anim: 'up'
+                , style: 'position:fixed; bottom:0; left:0; width: 100%; height: 500px; padding:10px 0; border:none;'
+            });
+        }
+        $(document).ready(function () {
+            $("#chinaArea").on("click", function () {
+                clearActive()
+                $(this).addClass("active");
+                const uluru = {
+                    lat: 39.92064419882475,
+                    lng: 116.39330968126845
+                };
+                map.setZoom(4);
+                map.setCenter(uluru);
+            });
+        });
+        function clearActive() {
+            $("#navbarNav ul li").removeClass('active');
+        }
+    </script>
+
+
 </body>
+
 </html>
