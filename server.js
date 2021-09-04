@@ -26,17 +26,17 @@ app.use(express.static("static"))
 
 app.get("/",(req,res)=>{
     let title = "你好ejs";
-    res.render("index",{
-        title:title
-    })
-})
-
-app.get("/2",(req,res)=>{
-    let title = "你好ejs";
     res.render("index2",{
         title:title
     })
 })
+
+// app.get("/2",(req,res)=>{
+//     let title = "你好ejs";
+//     res.render("index2",{
+//         title:title
+//     })
+// })
 app.get("/news",(req,res)=>{
     let userinfo={
         username:"张三",
