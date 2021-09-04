@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Home</title>
+    <link rel="shortcut icon" href="#" />
+    <!-- for-mobile-apps -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="" />
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+		function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- //for-mobile-apps -->
+    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="/css/colorbox.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- js -->
+    <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
+    <script>
+        let module = (function () {
+            const modulelist = {};
+            function define(name, modules, action) {
+                modules.map((m, i) => {
+                    modules[i] = modulelist[m];
+                });
+                modulelist[name] = action.apply(null, modules);
+                //console.log(modulelist);
+            }
+            return {
+                define
+            };
+        })();
+        module.define("hd", [], function () {
+            return {
+                first(arr) {
+                    return arr[0];
+                },
+                max(arr, key) {
+                    return arr.sort((a, b) => b[key] - a[key])[0];
+                }
+            }
+        });
+        module.define("lesson", ["hd"], function (hd) {
+            let data = [
+                { name: "tour1", price: 1990 },
+                { name: "tour2", price: 2990 },
+                { name: "tour3", price: 1990 }
+            ];
+            console.log(hd.max(data, "price"));
+        });
+
+    </script>
+    <script src="/js/layer.js"></script>
+    <script src="/js/jquery.colorbox-min.js"></script>
+    <!-- //js -->
+
+
+    <!-- font-awesome icons -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css" />
+    <!-- //font-awesome icons -->
+    <link href="http://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
+    <link
+        href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic'
+        rel='stylesheet' type='text/css'>
+    <style>
+        /* Set the size of the div element that contains the map */
+
+        #gmap_wrapper {
+            width: 100%;
+            padding-top: 100%;
+            position: relative;
+            margin: auto;
+        }
+
+        #gmap {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header w3layouts">
+        <div class="container">
+            <nav class="navbar navbar-default">
+                <div class="navbar-header navbar-left">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <h1><a class="navbar-brand" href="index.html">旅人</a></h1>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+                    <nav class="cl-effect-13" id="cl-effect-13">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="index.html">Home</a></li>
+                            <li><a href="packages.html">Packages</a></li>
+                            <li><a href="gallery.html">Gallery</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Short Codes <b
+                                        class="caret"></b></a>
+                                <ul class="dropdown-menu agile_short_dropdown">
+                                    <li><a href="icons.html">Icons</a></li>
+                                    <li><a href="typography.html">Typography</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+
+                    </nav>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- map -->
+    <div class="container-fluid">
+        <div id="gmap_wrapper">
+            <div id="gmap"></div>
+        </div>
+    </div>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDlSIs0y85rMhs9dughVmDStz7ZDajOhbI&callback=initMap&libraries=&v=weekly&channel=2"
+        async></script>
+
+    <script>
+        // Initialize and add the map
+        let map;
+        function initMap() {
+            // The location of Uluru
+            const uluru = {
+                lat: 35.662036,
+                lng: 139.862006
+            };
+            const tourStops = [
+                [{ lat: 35.662036, lng: 139.862006 }, "西葛西店"],
+                [{ lat: 35.76298921786845, lng: 139.61733706695614 }, "錬馬店"],
+                [{ lat: 35.90791264314329, lng: 139.65304228380143 }, "埼玉店"],
+            ];
+            // The map, centered at Uluru
+            map = new google.maps.Map(document.getElementById("gmap"), {
+                zoom: 8,
+                center: uluru,
+            });
+            // The marker, positioned at Uluru
+            // const marker = new google.maps.Marker({
+            //     position: uluru,
+            //     map: map,
+            // });
+            //const image = "https://www.club-t.com/common-club-t-web/all/images/header-logo.svg";
+
+            // const beachMarker = new google.maps.Marker({
+            //     //position: { lat: -33.89, lng: 151.274 },
+            //     position: uluru,
+            //     map,
+            //     icon: image,
+            // });
+            tourStops.forEach(([position, title], i) => {
+                const marker = new google.maps.Marker({
+                    position,
+                    map,
+                    title: `${i + 1}`,
+                    label: `${i + 1}`,
+                    optimized: false,
+                });
+                // Add a click listener for each marker, and set up the info window.
+                marker.addListener("click", () => {
+                    // infoWindow.close();
+                    // infoWindow.setContent(marker.getTitle());
+                    // infoWindow.open(marker.getMap(), marker);
+                    //getPicList(marker.getTitle())
+                    //console.log(marker.getTitle());
+                    getLayerColorBox();
+                });
+            });
+        }
+        function getPicList(lct) {
+
+            $("#picList").html("");
+            let pic1 = $("<img src='https://www.club-t.com/sp/special/japan/whc/images/img-index-15.jpg'>");
+            $("#picList").append(pic1);
+
+            let pic2 = $("<img src='https://www.club-t.com/sp/special/japan/whc/images/img-index-15.jpg'>");
+            $("#picList").append(pic2);
+
+        }
+
+        function getLayer() {
+            var str1 = $("#picList").html()
+            //layer
+            layer.open({
+                type: 1
+                , content: str1
+                , anim: 'up'
+                , style: 'position:fixed; bottom:0; left:0; width: 100%; height: 500px; padding:10px 0; border:none;'
+            });
+        }
+
+        function getLayerColorBox() {
+            $.colorbox({
+                //href: $(this).attr("href"),
+                href: "https://www.baidu.com",
+                transition: "fade",
+                innerHeight: '60%',
+                innerWidth: '80%',
+                overlayClose: true,
+                iframe: true,
+                opacity: 0.3
+            })
+        }
+        $(document).ready(function () {
+            $("#chinaArea").on("click", function () {
+                clearActive()
+                $(this).addClass("active");
+                const uluru = {
+                    lat: 39.92064419882475,
+                    lng: 116.39330968126845
+                };
+                map.setZoom(4);
+                map.setCenter(uluru);
+            });
+        });
+        function clearActive() {
+            $("#navbarNav ul li").removeClass('active');
+        }
+    </script>
+
+    <!-- relax -->
+    <div class="relax" style="margin-top: 30px;">
+        <div class="col-md-8 agileinfo_relax_right">
+
+            <h3>Just relax & <br> let have fun on your trip<br></h3>
+            <p>Proin iaculis purus consequat sem cure digni ssim. Donec
+                porttitora entum suscipit aenean rhoncus posuere odio in tincidunt.</p>
+            <div class="agileinfo_relax_right_wthree">
+                <ul>
+                    <li><i class="fa fa-check" aria-hidden="true"></i>Have safe journey</li>
+                    <li><i class="fa fa-check" aria-hidden="true"></i>Food supply</li>
+                    <li><i class="fa fa-check" aria-hidden="true"></i>Rooms </li>
+
+                </ul>
+            </div>
+            <div class="more">
+                <a href="#" class="hvr-shutter-in-vertical" data-toggle="modal" data-target="#myModal">Learn More<span
+                        class="glyphicon glyphicon-arrow-right"></span></a>
+            </div>
+        </div>
+        <div class="col-md-4 agileinfo_relax_left">
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- //relax -->
+    <!-- modal -->
+    <div class="modal about-modal fade" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Vacationing</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="agileits-w3layouts-info">
+                        <img src="images/9.jpg" class="img-responsive" alt="" />
+                        <p>Duis venenatis, turpis eu bibendum porttitor, sapien quam ultricies tellus, ac rhoncus risus
+                            odio eget nunc. Pellentesque ac fermentum diam. Integer eu facilisis nunc, a iaculis felis.
+                            Pellentesque pellentesque tempor enim, in dapibus turpis porttitor quis. Suspendisse
+                            ultrices hendrerit massa. Nam id metus id tellus ultrices ullamcorper. Cras tempor massa
+                            luctus, varius lacus sit amet, blandit lorem. Duis auctor in tortor sed tristique. Proin sed
+                            finibus sem.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //modal -->
+
+    <!-- latest-->
+    <div class="latest">
+        <div class="container">
+            <h3 class="w3l_head w3l_head1">Latest Trips</h3>
+            <p class="w3ls_head_para w3ls_head_para1">Lorem ipsum dolor amet sit</p>
+            <div class="latest-tp">
+                <div class="col-md-6 latest-agileits-w3layouts-left">
+                    <img src="images/a2.jpg" alt=" " class="img-responsive">
+                </div>
+                <div class="col-md-6 latest-agileits-w3layouts-right">
+                    <h4>Voluptatibus maiores </h4>
+                    <p>Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias
+                        consequatur aut perferendis doloribus asperiores repellat.</p>
+                    <div class="wthree_services_grid">
+                        <div class="col-xs-2 wthree_services_grid-left">
+                            <div class="wthree_services_grid-left1">
+                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-10 wthree_services_grid-right">
+                            <h5>doloribus asperiores</h5>
+                            <p>Itaque earum rerum hic tenetur a sapiente delectus, ut aut .</p>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                    <div class="wthree_services_grid">
+                        <div class="col-xs-2 wthree_services_grid-left">
+                            <div class="wthree_services_grid-left1">
+                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-10 wthree_services_grid-right">
+                            <h5>doloribus asperiores</h5>
+                            <p>Itaque earum rerum hic tenetur a sapiente delectus, ut aut .</p>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                    <div class="wthree_services_grid">
+                        <div class="col-xs-2 wthree_services_grid-left">
+                            <div class="wthree_services_grid-left1">
+                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-10 wthree_services_grid-right">
+                            <h5>doloribus asperiores</h5>
+                            <p>Itaque earum rerum hic tenetur a sapiente delectus, ut aut .</p>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <!-- footer -->
+    <div class="agileinfo_footer_bottom">
+        <div class="container">
+            <div class="col-md-4 agileinfo_footer_bottom_grid">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><span class="glyphicon glyphicon-home" aria-hidden="true"></span> 7th Street, Melbourne City,
+                        Australia.</li>
+                    <li><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span><a
+                            href="mailto:info@example.com">info@example.com</a></li>
+                    <li><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> (4584) 5689 0254 128</li>
+                </ul>
+
+            </div>
+
+            <div class="col-md-4 agileinfo_footer_bottom_grid">
+                <h3>Latest Tweets</h3>
+                <ul class="twi agileits_twitter">
+                    <li><i class="fa fa-twitter" aria-hidden="true"></i>Praesent imperdiet diam sagittis, egestas augue
+                        id <a href="#" class="mail">
+                            @http:example.com</a> <span>ABOUT 15 MINS</span></li>
+                    <li><i class="fa fa-twitter" aria-hidden="true"></i>Mauris tristique, dolor vel iaculis vestibulum<a
+                            href="#" class="mail">
+                            @http:example.com</a> <span>ABOUT 2 HOURS AGO</span></li>
+                </ul>
+            </div>
+            <div class="col-md-4 agileinfo_footer_bottom_grid">
+                <h3>Latest Posts</h3>
+                <div class="flickr-grids">
+                    <div class="flickr-grid agileits_w3layouts_flickr">
+                        <a href="#"><img src="images/2.jpg" alt=" " class="img-responsive"></a>
+                    </div>
+                    <div class="flickr-grid  agileits_w3layouts_flickr">
+                        <a href="#"><img src="images/3.jpg" alt=" " class="img-responsive"></a>
+                    </div>
+                    <div class="flickr-grid  agileits_w3layouts_flickr">
+                        <a href="#"><img src="images/4.jpg" alt=" " class="img-responsive"></a>
+                    </div>
+                    <div class="clearfix"> </div>
+
+                    <div class="flickr-grid  agileits_w3layouts_flickr">
+                        <a href="#"><img src="images/5.jpg" alt=" " class="img-responsive"></a>
+                    </div>
+                    <div class="flickr-grid  agileits_w3layouts_flickr">
+                        <a href="#"><img src="images/6.jpg" alt=" " class="img-responsive"></a>
+                    </div>
+                    <div class="flickr-grid  agileits_w3layouts_flickr">
+                        <a href="#"><img src="images/7.jpg" alt=" " class="img-responsive"></a>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+    <div class="footer-w3layouts">
+        <div class="container">
+            <div class="agile-copy">
+            </div>
+            <div class="agileits-social">
+                <ul>
+                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="#"><i class="fa fa-rss"></i></a></li>
+                    <li><a href="#"><i class="fa fa-vk"></i></a></li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <!-- //footer -->
+    <!-- for bootstrap working -->
+    <script src="/js/bootstrap.js"></script>
+    <!-- //for bootstrap working -->
+</body>
+
+</html>
